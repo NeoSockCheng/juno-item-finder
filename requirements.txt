@@ -238,7 +238,7 @@ py-cpuinfo @ file:///croot/py-cpuinfo_1698068081650/work
 pyarrow @ file:///croot/pyarrow_1738229418212/work/python
 pyasn1 @ file:///Users/ktietz/demo/mc3/conda-bld/pyasn1_1629708007385/work
 pyasn1-modules==0.2.8
-PyAudio==0.2.11
+PyAudio @ file:///home/conda/feedstock_root/build_artifacts/pyaudio_1636382920941/work
 pycodestyle @ file:///croot/pycodestyle_1726150303809/work
 pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
 pyct @ file:///croot/pyct_1675441480074/work
