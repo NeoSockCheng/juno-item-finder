@@ -1,5 +1,5 @@
 <launch>
-  <node pkg="juno-item-finder" type="google_sr.py" name="google_sr" output="screen"/>
-  <node pkg="juno-item-finder" type="google_tts.py" name="google_tts" output="screen"/>
-  <node pkg="juno-item-finder" type="speech_recognition.py" name="speech_recognition" output="screen"/>
+  <node pkg="juno_item_finder" type="google_sr.py" name="google_sr" output="screen"/>
+  <node pkg="juno_item_finder" type="google_tts.py" name="google_tts" output="screen"/>
+  <node pkg="juno_item_finder" type="speech_input.py" name="speech_input" output="screen"/>
 </launch>
