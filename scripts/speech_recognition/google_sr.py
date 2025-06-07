@@ -6,7 +6,7 @@ import sounddevice
 
 def googlesr():
     rospy.init_node('google_sr', anonymous=True)
-    pub = rospy.Publisher('user_voice_input', String, queue_size=10)
+    pub = rospy.Publisher('vision_guide_input', String, queue_size=10)
 
     while not rospy.is_shutdown():
         # obtain audio from the microphone
