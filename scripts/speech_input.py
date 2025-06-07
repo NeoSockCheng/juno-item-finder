@@ -6,6 +6,9 @@ import os
 import google.genai as genai
 from dotenv import load_dotenv
 
+# List of objects to check against
+object_list = ['apple', 'book', 'laptop', 'pen', 'bottle']
+
 def setup_gemini():
     """
     Load API key from .env and configure Gemini model.
@@ -25,6 +28,7 @@ client = setup_gemini()
 # Publishers
 object_pub = rospy.Publisher("item_finder_object", String, queue_size=10)
 response_pub = rospy.Publisher("item_finder_response", String, queue_size=10)
+stop_sr_pub = rospy.Publisher("item_finder_sr_termination", String, queue_size=10)
 
 def publish_log(message):
     """
@@ -37,14 +41,18 @@ def extract_object_from_text(text):
     """
     Use Gemini to extract the main object from user input.
     """
+    
     prompt = (
         f"From the following sentence, extract the main object, item, or thing the user is referring to. "
-        f"Sentence: \"{text}\". Reply with only the object name, nothing else."
+        f"Sentence: \"{text}\". "
+        f"Reply with only the object name if it's one of the following types: {', '.join(object_list)}. "
+        f"For example, if the user mentions 'iphone', respond with 'phone', or if they mention 'macbook', respond with 'laptop'. "
+        f"If no object from the list or related type is mentioned, reply with 'No object extracted'."
     )
 
     try:
         response = client.models.generate_content(
-            model="gemini-2.0-flash",
+            model="gemini-2.5-flash-preview-05-20",
             contents=prompt,
         )
         return response.text.strip()
@@ -56,24 +64,32 @@ def extract_object_from_text(text):
 
 def callback(msg):
     user_input = msg.data
-    publish_log(f"[User said] {user_input}")
+    rospy.loginfo(f"[User said] {user_input}")
 
+    # Extract the object name based on the user input
     extracted = extract_object_from_text(user_input)
 
-    if extracted:
-        publish_log(f"[Gemini extracted] Object: {extracted}")
-        object_pub.publish(extracted)
+    # Check if the object is valid (it shouldn't be 'No object extracted' or an empty string)
+    if extracted and extracted != "No object extracted" and extracted in object_list:
+        rospy.loginfo(f"[Gemini extracted] Object: {extracted}")
+        response_pub.publish(f"Finding Object: {extracted}")
+        stop_sr_pub.publish(f"stop")
+
+        # Stop listening after extracting the object
+        rospy.loginfo("[Speech Listener] Object extraction complete. Stopping listener...")
+        rospy.signal_shutdown("Object extraction complete.")
     else:
-        publish_log("[Gemini response] No object extracted.")
+        rospy.loginfo("[Gemini response] No object extracted.")
+        rospy.loginfo("[Speech Listener] No valid object found. Continuing to listen...")
 
 def speech_listener():
     rospy.init_node('speech_listener_gemini', anonymous=True)
     rospy.Subscriber("item_finder_input", String, callback)
-    publish_log("Gemini speech listener running...")
+    publish_log("Tell me what you want to find...")
     rospy.spin()
 
 if __name__ == "__main__":
     try:
         speech_listener()
     except rospy.ROSInterruptException:
-        publish_log("Gemini speech listener node stopped.")
+        rospy.loginfo("Gemini speech listener node stopped.")
