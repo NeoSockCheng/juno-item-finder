@@ -17,7 +17,7 @@ def callback(data):
 def googletts():
     rospy.init_node('google_tts', anonymous=True)
 
-    rospy.Subscriber("vision_guide_response", String, callback)
+    rospy.Subscriber("item_finder_response", String, callback)
 
     rospy.spin()
 

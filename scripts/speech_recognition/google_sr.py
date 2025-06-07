@@ -6,7 +6,7 @@ import sounddevice
 
 def googlesr():
     rospy.init_node('google_sr', anonymous=True)
-    pub = rospy.Publisher('vision_guide_input', String, queue_size=10)
+    pub = rospy.Publisher('item_finder_input', String, queue_size=10)
 
     while not rospy.is_shutdown():
         # obtain audio from the microphone
@@ -20,13 +20,17 @@ def googlesr():
             
         # recognize speech using Google Speech Recognition
         try:
-            result = r.recognize_google(audio, language="en-US")
-            print("SR result: " + result)
+            result = "I heard you are saying: " + r.recognize_google(audio, language="en-US")
+            print(result)
             pub.publish(result)
         except sr.UnknownValueError:
-            print("SR could not understand audio")
+            result = "I could not understand your audio, please try again."
+            print(result)
+            pub.publish(result)
         except sr.RequestError as e:
+            result = "Could not request results from Google Speech Recognition service."
             print("Could not request results from Google Speech Recognition service; {0}".format(e))
+            pub.publish(result)
 
 if __name__ == "__main__":
     try:

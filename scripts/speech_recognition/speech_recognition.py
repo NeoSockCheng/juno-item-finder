@@ -23,12 +23,12 @@ def setup_gemini():
 model = setup_gemini()
 
 # Publishers
-object_pub = rospy.Publisher("vision_guide_object", String, queue_size=10)
-response_pub = rospy.Publisher("vision_guide_response", String, queue_size=10)
+object_pub = rospy.Publisher("item_finder_object", String, queue_size=10)
+response_pub = rospy.Publisher("item_finder_response", String, queue_size=10)
 
 def publish_log(message):
     """
-    Log the message and also publish to vision_guide_response topic.
+    Log the message and also publish to item_finder_response topic.
     """
     rospy.loginfo(message)
     response_pub.publish(message)
@@ -65,7 +65,7 @@ def callback(msg):
 
 def speech_listener():
     rospy.init_node('speech_listener_gemini', anonymous=True)
-    rospy.Subscriber("vision_guide_input", String, callback)
+    rospy.Subscriber("item_finder_input", String, callback)
     publish_log("Gemini speech listener running...")
     rospy.spin()
 
