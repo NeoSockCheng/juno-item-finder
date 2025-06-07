@@ -3,7 +3,7 @@
 import rospy
 from std_msgs.msg import String
 import os
-import google.generativeai as genai
+import google.genai as genai
 from dotenv import load_dotenv
 
 def setup_gemini():
@@ -16,11 +16,11 @@ def setup_gemini():
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise EnvironmentError("GEMINI_API_KEY not found in .env file.")
-    genai.configure(api_key=api_key)
-    return genai.GenerativeModel("gemini-1.5-flash")
+    client = genai.Client(api_key=api_key)
+    return client
 
 # Initialize Gemini model
-model = setup_gemini()
+client = setup_gemini()
 
 # Publishers
 object_pub = rospy.Publisher("item_finder_object", String, queue_size=10)
@@ -43,7 +43,10 @@ def extract_object_from_text(text):
     )
 
     try:
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt,
+        )
         return response.text.strip()
     except Exception as e:
         error_msg = f"Gemini API Error: {e}"
