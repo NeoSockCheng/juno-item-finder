@@ -6,14 +6,14 @@ import sounddevice
 
 def googlesr():
     rospy.init_node('google_sr', anonymous=True)
-    pub = rospy.Publisher('result', String, queue_size=10)
+    pub = rospy.Publisher('user_voice_input', String, queue_size=10)
 
     while not rospy.is_shutdown():
         # obtain audio from the microphone
         r = sr.Recognizer()
         
         with sr.Microphone(device_index=0) as source:
-            print(">>> Say something!")
+            print(">>> Tell me what you want to find!")
             r.adjust_for_ambient_noise(source)
             audio = r.listen(source)
             # audio = r.record(source, duration=5)

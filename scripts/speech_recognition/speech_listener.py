@@ -8,7 +8,7 @@ def callback(msg):
 
 def speech_listener():
     rospy.init_node('speech_listener', anonymous=True)
-    rospy.Subscriber("result", String, callback)
+    rospy.Subscriber("user_voice_input", String, callback)
     rospy.loginfo("Speech listener is running. Waiting for speech...")
     rospy.spin()
 
