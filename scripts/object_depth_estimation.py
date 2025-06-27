@@ -10,11 +10,15 @@ import numpy as np
 import json
 from std_msgs.msg import String
 import base64
-
+from dotenv import load_dotenv
+import os
 
 # === CONFIG ===
 API_URL = "https://yzh70-depth-pro.hf.space/depth"
-API_KEY = "mysecureapikey"
+env_path = os.path.join(os.path.dirname(__file__), ".env")
+load_dotenv(dotenv_path=env_path)
+
+API_KEY = os.getenv("DEPTH_PRO_API_KEY")
 
 depth_result_pub = rospy.Publisher('/depth_estimation_result', String, queue_size=10)
 tts_pub = rospy.Publisher('item_finder_response', String, queue_size=10)
