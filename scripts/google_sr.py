@@ -13,15 +13,24 @@ def googlesr():
         # obtain audio from the microphone
         r = sr.Recognizer()
         
-        with sr.Microphone(device_index=1) as source:
-            # print(">>> Tell me what you want to find!")
+        with sr.Microphone(device_index=1) as source: ##########################################
+            print(">>> Tell me what you want to find!")
             r.adjust_for_ambient_noise(source)
+            # try:
+            #     audio = r.listen(source, timeout=5, phrase_time_limit=10)
+            #     # audio = r.listen(source)
+            #     print("Audio captured, processing...")
+            # except sr.WaitTimeoutError:
+            #     print("No speech detected (timeout). Please try again.")
+            #     continue
             audio = r.listen(source)
+            print("Audio captured, processing...")
+
             # audio = r.record(source, duration=5)
             
         # recognize speech using Google Speech Recognition
         try:
-            result = "I heard you are saying: " + r.recognize_google(audio, language="en-US")
+            result = "I heard you are saying: " + r.recognize_google(audio, language="en-MY") ###################
             print(result)
             pub.publish(result)
         except sr.UnknownValueError:
@@ -39,7 +48,7 @@ def callback(msg):
 if __name__ == "__main__":
     try:
         print(f"Available mics: {sr.Microphone.list_microphone_names()}")
-        # rospy.loginfo(f"Available mics: {sr.Microphone.list_microphone_names()}")
+        rospy.loginfo(f"Available mics: {sr.Microphone.list_microphone_names()}")
         googlesr()
     except rospy.ROSInterruptException:
         pass
