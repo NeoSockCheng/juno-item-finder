@@ -166,7 +166,8 @@ def try_trigger_depth(): #CHANGED
             rospy.logerr("JPEG encoding failed")
             return
 
-        status_msg = String(data="depth_started")
+        status_msg = String()
+        status_msg.data = "depth_started"
         depth_status_pub.publish(status_msg)
 
         tts_pub.publish(String(data=f"{target_object.capitalize()} detected. Estimating distance. Please stay still for up to 2 minutes."))
@@ -196,7 +197,9 @@ def try_trigger_depth(): #CHANGED
         else:
             rospy.logerr(f"HTTP Error {response.status_code}: {response.text}")
 
-        depth_status_pub.publish(String(data="depth_done"))
+        status_msg.data = "depth_done"
+        rospy.sleep(5.0)
+        depth_status_pub.publish(status_msg)
     except Exception as e:
         rospy.logerr(f"Error processing depth: {e}")
 

@@ -106,7 +106,7 @@ def item_callback(msg):
 
         # Stop listening after extracting the object
         rospy.loginfo("[Speech Listener] Object extraction complete. Stopping listener...")
-        rospy.signal_shutdown("Object extraction complete.")
+        # rospy.signal_shutdown("Object extraction complete.")
     else:
         rospy.loginfo("[Gemini response] No object extracted.")
         rospy.loginfo("[Speech Listener] No valid object found. Continuing to listen...")
