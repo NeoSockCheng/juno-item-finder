@@ -1,4 +1,4 @@
-name: juno_item_finder
+name: juno_vision_guide
 channels:
   - conda-forge
   - defaults
@@ -518,4 +518,4 @@ dependencies:
       - ultralytics==8.3.158
       - ultralytics-thop==2.0.14
       - websockets==15.0.1
-prefix: /home/mustar/anaconda3/envs/juno_item_finder
+prefix: /home/mustar/anaconda3/envs/juno_vision_guide
