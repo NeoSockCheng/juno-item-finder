@@ -6,7 +6,7 @@ import os
 
 def callback(data):
     # Convert received text to speech and play audio output
-    rospy.loginfo("Input: %s", data.data)
+    rospy.loginfo("Audio Output: %s", data.data)
 
     text = data.data
     tts = gTTS(text, lang="en-US")

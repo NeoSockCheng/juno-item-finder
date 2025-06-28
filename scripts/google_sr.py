@@ -15,7 +15,6 @@ def googlesr():
         r = sr.Recognizer()
         
         with sr.Microphone(device_index=1) as source:
-            print(">>> Tell me what you want to find!")
             r.adjust_for_ambient_noise(source)
             audio = r.listen(source)
             print("Audio captured, processing...")

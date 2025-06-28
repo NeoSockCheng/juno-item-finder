@@ -47,7 +47,6 @@ def ros_img_to_cv2(msg):
 
 def publish_compressed_image(image):
     # Compress and publish detected object image for depth estimation
-    rospy.loginfo(f"todel publish_compressed_image called")
     try:
         # Encode image to JPEG
         success, encoded_img = cv2.imencode('.jpg', image)
@@ -89,11 +88,11 @@ def image_callback(msg):
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
                 cv2.putText(frame, f"{label} {confidence:.2f}", (x1, y1 - 10),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-
-                rospy.loginfo(f"Target '{target_object}' detected with confidence {confidence:.2f}")
                 
                 # Only capture and publish once
                 if not object_captured:
+                    rospy.loginfo("Target detected.")
+                    rospy.loginfo(f"Target '{target_object}' detected with confidence {confidence:.2f}")
                     publish_compressed_image(frame)
                     bbox_data = {
                         "class_name": label,
@@ -121,7 +120,6 @@ def image_callback(msg):
         object_captured = False
 
     if detected:
-        rospy.loginfo("Target detected.")
         cv2.imshow("YOLOv8 Detection", frame) 
         cv2.waitKey(1)                         
 

@@ -46,7 +46,6 @@ def publish_log(message):
     Log the message and also publish to item_finder_response topic.
     """
     # Send message to both log and TTS system
-    rospy.loginfo(message)
     response_pub.publish(message)
 
 def extract_object_from_text(text):
@@ -85,6 +84,7 @@ def depth_status_callback(msg):
     elif msg.data == "depth_done":
         depth_busy = False
         rospy.loginfo("[Speech Listener] Depth processing complete. Ready for new input.")
+        rospy.loginfo("Tell me what you want to find...")
         rospy.sleep(5.0)
         publish_log("Tell me what you want to find...")  # prompt user again
         stop_sr_pub.publish("start")  # resume speech recognition

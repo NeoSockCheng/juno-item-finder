@@ -30,7 +30,6 @@ latest_image = None
 # === Subscriber callback for object name ===
 def object_name_callback(msg):
     # Store target object name for depth estimation processing
-    rospy.loginfo(f"todel object_name_callback called")
     global target_object
     target_object = msg.data
     rospy.loginfo(f"Target object set to: {target_object}")
@@ -38,7 +37,6 @@ def object_name_callback(msg):
 
 def detection_callback(msg):
     # Process object detection data and trigger depth estimation
-    rospy.loginfo("detection_callback called")
     global latest_detection
     try:
         latest_detection = json.loads(msg.data)
@@ -110,7 +108,6 @@ def try_trigger_depth():
 
 def compressed_image_callback(msg): 
     # Store received image and attempt to trigger depth estimation
-    rospy.loginfo("compressed_image_callback called")
     global latest_image
     latest_image = msg
     try_trigger_depth()
