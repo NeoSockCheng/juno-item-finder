@@ -107,7 +107,7 @@ def image_callback(msg):
 
     # Check for timeout
     if waiting_for_detection and (time.time() - last_detection_time > 20):
-        rospy.logwarn("Timeout: Target object not found in 10 seconds.")
+        rospy.logwarn("Timeout: Target object not found in 20 seconds.")
 
         # Tell the user to try again via TTS
         msg = String()
