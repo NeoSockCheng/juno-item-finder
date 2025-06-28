@@ -5,30 +5,21 @@ import speech_recognition as sr
 import sounddevice
 
 def googlesr():
+    # Initialize ROS node and set up publishers/subscribers for speech recognition
     rospy.init_node('google_sr', anonymous=True)
     rospy.Subscriber("item_finder_sr_termination", String, callback)
     pub = rospy.Publisher('item_finder_input', String, queue_size=10)
 
     while not rospy.is_shutdown():
-        # obtain audio from the microphone
+        # Capture audio from microphone and process speech
         r = sr.Recognizer()
         
-        with sr.Microphone(device_index=1) as source: ##########################################
-            print(">>> Tell me what you want to find!")
+        with sr.Microphone(device_index=1) as source:
             r.adjust_for_ambient_noise(source)
-            # try:
-            #     audio = r.listen(source, timeout=5, phrase_time_limit=10)
-            #     # audio = r.listen(source)
-            #     print("Audio captured, processing...")
-            # except sr.WaitTimeoutError:
-            #     print("No speech detected (timeout). Please try again.")
-            #     continue
             audio = r.listen(source)
             print("Audio captured, processing...")
-
-            # audio = r.record(source, duration=5)
             
-        # recognize speech using Google Speech Recognition
+        # Convert speech to text using Google Speech Recognition API
         try:
             result = "I heard you are saying: " + r.recognize_google(audio, language="en-MY") ###################
             print(result)
@@ -41,6 +32,7 @@ def googlesr():
             print("Could not request results from Google Speech Recognition service; {0}".format(e))
             
 def callback(msg):
+    # Handle termination signal to stop speech recognition
     if msg=="stop":
         rospy.loginfo("[Speech Listener] Object extraction complete. Stopping speech recognition...")
         rospy.signal_shutdown("Object extraction complete.")

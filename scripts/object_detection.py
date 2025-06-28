@@ -24,6 +24,7 @@ tts_pub = rospy.Publisher('item_finder_response', String, queue_size=10)
 bbox_pub = rospy.Publisher('detected_object_bbox', String, queue_size=10)
 
 def keyword_callback(msg):
+    # Set target object for detection and reset detection state
     global target_object, last_detection_time, waiting_for_detection, object_captured
     target_object = msg.data
     last_detection_time = time.time()
@@ -32,6 +33,7 @@ def keyword_callback(msg):
     rospy.loginfo(f"Target object set to: {target_object}")
 
 def ros_img_to_cv2(msg):
+    # Convert ROS Image message to OpenCV format for processing
     try:
         # Convert ROS Image message to numpy array manually
         dtype = np.uint8
@@ -44,7 +46,7 @@ def ros_img_to_cv2(msg):
         return None
 
 def publish_compressed_image(image):
-    rospy.loginfo(f"todel publish_compressed_image called")
+    # Compress and publish detected object image for depth estimation
     try:
         # Encode image to JPEG
         success, encoded_img = cv2.imencode('.jpg', image)
@@ -63,12 +65,14 @@ def publish_compressed_image(image):
         rospy.logerr(f"Error publishing compressed image: {e}")
 
 def image_callback(msg):
+    # Process camera frames with YOLO detection and handle target object detection
     global target_object, last_detection_time, waiting_for_detection, object_captured
 
     frame = ros_img_to_cv2(msg)
     if frame is None:
         return
 
+    # Run YOLO detection on current frame
     results = model(frame, verbose=False)
     detected = False
 
@@ -84,11 +88,11 @@ def image_callback(msg):
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
                 cv2.putText(frame, f"{label} {confidence:.2f}", (x1, y1 - 10),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-
-                rospy.loginfo(f"Target '{target_object}' detected with confidence {confidence:.2f}")
                 
                 # Only capture and publish once
                 if not object_captured:
+                    rospy.loginfo("Target detected.")
+                    rospy.loginfo(f"Target '{target_object}' detected with confidence {confidence:.2f}")
                     publish_compressed_image(frame)
                     bbox_data = {
                         "class_name": label,
@@ -103,7 +107,7 @@ def image_callback(msg):
 
     # Check for timeout
     if waiting_for_detection and (time.time() - last_detection_time > 20):
-        rospy.logwarn("Timeout: Target object not found in 10 seconds.")
+        rospy.logwarn("Timeout: Target object not found in 20 seconds.")
 
         # Tell the user to try again via TTS
         msg = String()
@@ -116,11 +120,11 @@ def image_callback(msg):
         object_captured = False
 
     if detected:
-        rospy.loginfo("Target detected.")
         cv2.imshow("YOLOv8 Detection", frame) 
         cv2.waitKey(1)                         
 
 def object_detection():
+    # Initialize ROS node and set up subscribers for object detection
     rospy.init_node('object_detection_node', anonymous=True)
     rospy.Subscriber('/usb_cam/image_raw', Image, image_callback)
     rospy.Subscriber('item_finder_object', String, keyword_callback)
