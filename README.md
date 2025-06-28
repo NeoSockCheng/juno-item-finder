@@ -171,25 +171,6 @@ Full object list can be found in `yolo_object_list.json`
 Speech Recognition → Speech Processing (Gemini AI) → Object Detection (YOLOv8) → Depth Estimation → Text-to-Speech
 ```
 
-## 🔧 Dependencies
-
-### ROS Dependencies
-- `rospy` - Python ROS interface
-- `roscpp` - C++ ROS interface  
-- `std_msgs` - Standard ROS message types
-- `usb_cam` - USB camera driver package
-
-### Python Dependencies (Key Packages)
-- `ultralytics` - YOLOv8 object detection
-- `google-generativeai` - Google Gemini AI SDK
-- `opencv-python` - Computer vision processing
-- `speech-recognition` - Voice input processing
-- `gtts` - Google Text-to-Speech
-- `requests` - HTTP API communication
-- `python-dotenv` - Environment variable management
-
-**Full dependency list**: See `requirements.txt` (390+ packages)
-
 ## 🛠️ Troubleshooting
 
 ### Common Issues
@@ -215,11 +196,6 @@ Speech Recognition → Speech Processing (Gemini AI) → Object Detection (YOLOv
 - Adjust confidence threshold if needed
 - Check camera focus and positioning
 
-### Performance Optimization
-- Use GPU acceleration for YOLOv8 if available
-- Adjust image resolution for faster processing
-- Monitor system resources during operation
-
 ## Project Structure
 
 ```
@@ -231,22 +207,15 @@ juno-vision-guide/
 │   ├── google_tts.py              # Text-to-speech node  
 │   ├── speech_input.py            # AI speech processing node
 │   ├── object_detection.py        # YOLOv8 detection node
-│   └── object_depth_estimation.py # Depth estimation node
+│   ├── object_depth_estimation.py # Depth estimation node
+│   └── .env                       # API keys for Gemini and Depth Pro
 ├── CMakeLists.txt                 # CMake build configuration
 ├── package.xml                    # ROS package metadata
-├── requirements.txt               # Python dependencies
+├── environment.yml               # Conda environment dependencies
 ├── yolo_object_list.json         # YOLO class mappings
 ├── yolov8n.pt                    # YOLOv8 model weights
 └── README.md                     # This file
 ```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## License
 
