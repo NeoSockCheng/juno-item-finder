@@ -127,7 +127,8 @@ GEMINI_API_KEY=your_gemini_api_key_here
 DEPTH_PRO_API_KEY=mysecureapikey
 ```
 
-**Note**: Without the Depth Pro API key, the system will still work for object detection but distance estimation will be unavailable.
+**Depth Pro Hosting**: We host the Depth Pro model on Hugging Face because it requires GPU to run:
+https://huggingface.co/spaces/yzh70/depth-pro/tree/main.
 
 ## 🚀 Usage
 
