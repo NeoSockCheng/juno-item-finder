@@ -81,28 +81,11 @@ $ source ~/.bashrc
 ### 3. Create and Activate Conda Environment
 ```bash
 $ conda -V # Check conda installation
-$ conda create -n yourenvname python=3.10 anaconda
-$ source activate yourenvname
+$ conda env create -f environment.yml
+$ conda activate juno_vision_guide
 ```
 
-### 4. Install Python Dependencies
-```bash
-$ pip install -r ~/catkin_ws_2/src/juno-vision-guide/requirements.txt
-```
-
-### 5. Install Additional System Dependencies
-```bash
-# For audio playback
-$ sudo apt-get install mpg321
-
-# For USB camera support
-$ sudo apt-get install ros-noetic-usb-cam
-
-# For OpenCV and computer vision
-$ sudo apt-get install python3-opencv
-```
-
-### 6. Build Catkin Workspace
+### 4. Build Catkin Workspace
 ```bash
 $ cd ~/catkin_ws_2
 $ catkin_make
@@ -110,22 +93,12 @@ $ catkin_make
 
 ## 🔑 API Keys Setup
 
-The system requires two API keys for full functionality:
+The system requires Google Gemini API key (free of charge) for full functionality:
 
-### 1. Google Gemini API
-1. Get your API key from: https://aistudio.google.com/app/apikey
-2. Create a `.env` file in the project root directory
-3. Add your Gemini API key:
-```plaintext
-GEMINI_API_KEY=your_gemini_api_key_here
-```
-
-### 2. Depth Pro API (Optional)
-1. The Depth Pro API key is publicly available: `mysecureapikey`
-2. Add to the same `.env` file:
-```plaintext
-DEPTH_PRO_API_KEY=mysecureapikey
-```
+1. Visit https://aistudio.google.com/app/apikey
+2. Sign in with your Google account
+3. Generate an API key and copy it
+4. Replace `your-gemini-api-key-placeholder` in the `.env` file with your actual key
 
 **Depth Pro Hosting**: We host the Depth Pro model on Hugging Face because it requires GPU to run:
 https://huggingface.co/spaces/yzh70/depth-pro/tree/main.
@@ -155,6 +128,7 @@ $ roslaunch juno_vision_guide juno_vision_guide.launch
 - "Where is my laptop?" → Detects laptop  
 - "Show me the bottle" → Detects bottle
 - "Find the chair" → Detects chair
+Full object list can be found in `yolo_object_list.json`
 
 ### System Workflow
 1. **Voice Input** - Speak your request naturally
@@ -162,6 +136,7 @@ $ roslaunch juno_vision_guide juno_vision_guide.launch
 3. **Visual Detection** - YOLOv8 finds the object in camera feed
 4. **Distance Calculation** - Depth Pro estimates distance
 5. **Voice Response** - System announces results
+6. **Loop to Next Query** - Once complete, the system prompts for the next object to find automatically
 
 ## 🔧 Configuration
 
@@ -245,7 +220,7 @@ Speech Recognition → Speech Processing (Gemini AI) → Object Detection (YOLOv
 - Adjust image resolution for faster processing
 - Monitor system resources during operation
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 juno-vision-guide/
@@ -265,7 +240,7 @@ juno-vision-guide/
 └── README.md                     # This file
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -273,11 +248,11 @@ juno-vision-guide/
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **YOLOv8** by Ultralytics for object detection
 - **Google Gemini AI** for natural language processing

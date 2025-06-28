@@ -3,8 +3,5 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Environment and secrets
-.env
-
 # IDE files
 .vscode/
