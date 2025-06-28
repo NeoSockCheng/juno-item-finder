@@ -12,7 +12,7 @@ def callback(data):
     
     tts.save("speech.mp3")
     os.system("mpg321 speech.mp3")
-    os.remove("speech.mp3")
+    # os.remove("speech.mp3")
     
 def googletts():
     rospy.init_node('google_tts', anonymous=True)
