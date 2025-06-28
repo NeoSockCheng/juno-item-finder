@@ -85,10 +85,12 @@ def image_callback(msg):
                 cv2.putText(frame, f"{label} {confidence:.2f}", (x1, y1 - 10),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
-                rospy.loginfo(f"Target '{target_object}' detected with confidence {confidence:.2f}")
+                # rospy.loginfo(f"Target '{target_object}' detected with confidence {confidence:.2f}")
                 
                 # Only capture and publish once
                 if not object_captured:
+                    rospy.loginfo("Target detected.")
+                    rospy.loginfo(f"Target '{target_object}' detected with confidence {confidence:.2f}")
                     publish_compressed_image(frame)
                     bbox_data = {
                         "class_name": label,
@@ -116,7 +118,7 @@ def image_callback(msg):
         object_captured = False
 
     if detected:
-        rospy.loginfo("Target detected.")
+        # rospy.loginfo("Target detected.")
         cv2.imshow("YOLOv8 Detection", frame) 
         cv2.waitKey(1)                         
 
