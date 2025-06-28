@@ -10,6 +10,7 @@ import json
 depth_busy = False  # Global flag to block user input during depth processing
 
 def load_object_list_from_json(filename):
+    # Load YOLO object classes from JSON file for validation
     path = os.path.join(os.path.dirname(os.path.dirname(__file__)), filename)
     with open(path, "r") as f:
         label_dict = json.load(f)
@@ -22,6 +23,7 @@ def setup_gemini():
     """
     Load API key from .env and configure Gemini model.
     """
+    # Initialize Gemini AI client with API key from environment
     env_path = os.path.join(os.path.dirname(__file__), ".env")
     load_dotenv(dotenv_path=env_path)
 
@@ -43,14 +45,14 @@ def publish_log(message):
     """
     Log the message and also publish to item_finder_response topic.
     """
-    rospy.loginfo(message)
+    # Send message to both log and TTS system
     response_pub.publish(message)
 
 def extract_object_from_text(text):
     """
     Use Gemini to extract the main object from user input.
     """
-    
+    # Create prompt to extract object names using Gemini AI
     prompt = (
         f"From the following sentence, extract the main object, item, or thing the user is referring to. "
         f"Sentence: \"{text}\". "
@@ -60,6 +62,7 @@ def extract_object_from_text(text):
     )
 
     try:
+        # Send prompt to Gemini and return extracted object
         response = client.models.generate_content(
             model="gemini-2.5-flash-preview-05-20",
             contents=prompt,
@@ -72,6 +75,7 @@ def extract_object_from_text(text):
         return ""
     
 def depth_status_callback(msg):
+    # Handle depth processing status to manage speech recognition flow
     global depth_busy
     if msg.data == "depth_started":
         depth_busy = True
@@ -80,11 +84,13 @@ def depth_status_callback(msg):
     elif msg.data == "depth_done":
         depth_busy = False
         rospy.loginfo("[Speech Listener] Depth processing complete. Ready for new input.")
+        rospy.loginfo("Tell me what you want to find...")
         rospy.sleep(5.0)
         publish_log("Tell me what you want to find...")  # prompt user again
         stop_sr_pub.publish("start")  # resume speech recognition
 
 def item_callback(msg):
+    # Process user speech input and extract target object using Gemini AI
     global depth_busy
     if depth_busy:
         rospy.loginfo("[Speech Listener] Depth busy. Ignoring input.")
@@ -106,12 +112,12 @@ def item_callback(msg):
 
         # Stop listening after extracting the object
         rospy.loginfo("[Speech Listener] Object extraction complete. Stopping listener...")
-        # rospy.signal_shutdown("Object extraction complete.")
     else:
         rospy.loginfo("[Gemini response] No object extracted.")
         rospy.loginfo("[Speech Listener] No valid object found. Continuing to listen...")
 
 def speech_listener():
+    # Initialize ROS node and set up all subscribers for speech processing
     rospy.init_node('speech_listener_gemini', anonymous=True)
     rospy.Subscriber("item_finder_input", String, item_callback)
     rospy.Subscriber("depth_status", String, depth_status_callback)
