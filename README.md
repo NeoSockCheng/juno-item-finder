@@ -142,7 +142,7 @@ $ roscore
 ```bash
 $ cd ~/catkin_ws_2
 $ source devel/setup.bash
-$ roslaunch juno_vision_guide juno_item_finder.launch
+$ roslaunch juno_vision_guide juno_vision_guide.launch
 ```
 
 3. **Start using voice commands**:
@@ -250,7 +250,7 @@ Speech Recognition → Speech Processing (Gemini AI) → Object Detection (YOLOv
 ```
 juno-vision-guide/
 ├── launch/
-│   └── juno_item_finder.launch    # ROS launch configuration
+│   └── juno_vision_guide.launch    # ROS launch configuration
 ├── scripts/
 │   ├── google_sr.py               # Speech recognition node
 │   ├── google_tts.py              # Text-to-speech node  

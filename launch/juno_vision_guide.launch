@@ -1,8 +1,8 @@
 <launch>
   <include file="$(find usb_cam)/launch/usb_cam-test.launch"/>
-  <node pkg="juno_item_finder" type="google_sr.py" name="google_sr" output="screen"/>
-  <node pkg="juno_item_finder" type="google_tts.py" name="google_tts" output="screen"/>
-  <node pkg="juno_item_finder" type="speech_input.py" name="speech_input" output="screen"/>
-  <node pkg="juno_item_finder" type="object_depth_estimation.py" name="object_depth_estimation" output="screen"/>
-  <node pkg="juno_item_finder" type="object_detection.py" name="object_detection" output="screen"/>
+  <node pkg="juno_vision_guide" type="google_sr.py" name="google_sr" output="screen"/>
+  <node pkg="juno_vision_guide" type="google_tts.py" name="google_tts" output="screen"/>
+  <node pkg="juno_vision_guide" type="speech_input.py" name="speech_input" output="screen"/>
+  <node pkg="juno_vision_guide" type="object_depth_estimation.py" name="object_depth_estimation" output="screen"/>
+  <node pkg="juno_vision_guide" type="object_detection.py" name="object_detection" output="screen"/>
 </launch>
